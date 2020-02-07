@@ -21,7 +21,7 @@ function drawChart (data) {
   height = 500 - margin.top - margin.bottom;
 
   // parse the date / time
-  var parseTime = d3.timeParse("%Y");
+  var parseTime = d3.timeParse("%Y-%m-%d");
 
   // set the ranges
   var x = d3.scaleTime().range([0, width]);
@@ -46,12 +46,11 @@ function drawChart (data) {
 
   function draw (data) {
     console.log('monkey', data);
+  
     // format the data
     data.forEach(function(d) {
-      console.log(d.day)
-      console.log(d.downloads)
-      d.Date = parseTime(d.day);
-      d.Downloads = +d.downloads;
+      d.day = parseTime(d.day);
+      d.downloads = +d.downloads;
     });
 
     // sort years ascending
@@ -60,9 +59,9 @@ function drawChart (data) {
     });
 
     // Scale the range of the data
-    x.domain(d3.extent(data, function(d) { return d.Date; }));
+    x.domain(d3.extent(data, function(d) { return d.day; }));
     y.domain([0, d3.max(data, function(d) {
-      return Math.max(d.Downloads); })]);
+      return Math.max(d.downloads); })]);
 
     // Add the valueline path.
     svg.append("path")
