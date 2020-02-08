@@ -17,7 +17,7 @@ function LineChart (props) {
 
 function drawChart (data) {
   // set the dimensions and margins of the graph
-  var margin = {top: 20, right: 20, bottom: 30, left: 150},
+  var margin = {top: 20, right: 20, bottom: 30, left: 90},
   width = 960 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
 
@@ -42,11 +42,10 @@ function drawChart (data) {
     .curve(d3.curveBasis);
 
   // append the svg obgect to the body of the page
-  // appends a 'group' element to 'svg'
-  // moves the 'group' element to the top left margin
   var svg = d3.select("#line-chart-T1").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+
     .append("g")
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
@@ -100,7 +99,7 @@ function drawChart (data) {
           .attr("stop-color", function(d) { return d.color; });
 
     // gridlines in y axis function
-    const make_y_gridlines = () => {		
+    const yGridlines = () => {		
       return d3.axisLeft(y)
           .ticks(5)
     }
@@ -108,7 +107,7 @@ function drawChart (data) {
     // Add the gridlines
     svg.append("g")			
       .attr("class", "grid")
-      .call(make_y_gridlines()
+      .call(yGridlines()
           .tickSize(-width)
           .tickFormat("")
       );
@@ -119,26 +118,35 @@ function drawChart (data) {
       .attr("class", "line")
       .attr("d", line);
 
+    // Format the y-axis labels
+    // range only supports millions ("300M") and billions ("7B")
+    const largeFormat = (d) => {
+      const unit = parseFloat(d3.format("s")(d));
+      const unitType = `${d}`.length < 10 ? 'M' : 'B';
+      return `${unit}${unitType}`;
+    }
+    
     // Add the Y Axis
     svg.append("g")
       .attr("class", "y-axis")
       .call(d3.axisLeft(y)
         .ticks(5)
-        .tickFormat((d) => { 
-          return `${parseFloat(d3.format("s")(d))} M`;
+        .tickFormat((d) => {
+          return largeFormat(d);
         })
       );
   }
 }
 
 const ChartContainer = styled.div`
-
   svg {
     background: rgb(35,44,60);
   }
 
   text {
     fill: white;
+    font-size: 25px;
+    font-weight: 100;
   }
 
   .y-axis path, .y-axis line  {
