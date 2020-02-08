@@ -6,7 +6,7 @@ function LineChart (props) {
   useEffect(() => {
     const data = props.data;
     if (data.length) {
-      drawChart(data.slice(0, 10));
+      drawChart(data.slice(data.length-20)); //past 20 days
     }
   });
 
@@ -52,9 +52,7 @@ function drawChart (data) {
 
   draw(data);
 
-  function draw (data) {
-    console.log('monkey', data);
-  
+  function draw (data) {  
     // format the data
     data.forEach(function(d) {
       d.day = parseTime(d.day);
