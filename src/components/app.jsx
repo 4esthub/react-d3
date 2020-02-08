@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import LineChart from './charts/line-chart';
+import LineChart from './charts/LineChart';
 
 function App () {
   const [chartData, setChartData] = useState({})
@@ -17,19 +16,10 @@ function App () {
     })();
   }, []);
 
-  const AppContainer = styled.div`
-    background: pink;
-
-    body {
-      padding: 0;
-      margin: 0;
-    }
-  `;
-
   return (
-    <AppContainer>
+    <div>
       <LineChart data={chartData} dataKey="downloads" />
-    </AppContainer>
+    </div>
   )
 }
 

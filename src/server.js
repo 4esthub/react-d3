@@ -7,7 +7,7 @@ app.use(compression());
 app.use(express.static("public"));
 app.use("/", ssr);
 
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 8080;
 app.listen(port, function listenHandler() {
   console.info(`Running on ${port}...`);
 });
