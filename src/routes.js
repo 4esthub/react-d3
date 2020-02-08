@@ -10,6 +10,9 @@ router.get("/*", async (req, res) => {
   const theHtml = `
   <html>
   <head><title>React-D3</title></head>
+  <style>
+    body {padding: 0; margin: 0;}
+  </style>
   <body>
     <div id="reactele">{{{reactele}}}</div>
     <script src="/app.js" charset="utf-8"></script>

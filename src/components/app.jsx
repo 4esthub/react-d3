@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import LineChart from './charts/line-chart';
 
 function App () {
@@ -16,10 +17,19 @@ function App () {
     })();
   }, []);
 
+  const AppContainer = styled.div`
+    background: pink;
+
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  `;
+
   return (
-    <div>
+    <AppContainer>
       <LineChart data={chartData} dataKey="downloads" />
-    </div>
+    </AppContainer>
   )
 }
 

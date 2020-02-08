@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import * as d3 from "d3";
+import styled from 'styled-components';
 
 function LineChart (props) {
   useEffect(() => {
     const data = props.data;
     if (data.length) {
-      drawChart(data);
+      drawChart(data.slice(0, 10));
     }
   });
 
+  const ChartContainer = styled.div`
+    background: lightgreen;
+
+    .y-axis path, .y-axis line  {
+      display:none;
+    }
+
+    .line {
+      fill none
+    }
+  `;
+
   return (
-    <div className='line-chart-T1' />
+    <ChartContainer id='line-chart-T1' />
   );
 }
 
@@ -27,15 +40,21 @@ function drawChart (data) {
   var x = d3.scaleTime().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
 
+  // define the area
+  var area = d3.area()
+    .x(function(d) { return x(d.day); })
+    .y0(height)
+    .y1(function(d) { return y(d.downloads); });
+
   // define the line
-  var valueline = d3.line()
+  var line = d3.line()
     .x(function(d) { return x(d.day); })
     .y(function(d) { return y(d.downloads); });
 
   // append the svg obgect to the body of the page
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
-  var svg = d3.select(".line-chart-T1").append("svg")
+  var svg = d3.select("#line-chart-T1").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -63,19 +82,21 @@ function drawChart (data) {
     y.domain([0, d3.max(data, function(d) {
       return Math.max(d.downloads); })]);
 
-    // Add the valueline path.
+    // Add the area
     svg.append("path")
       .data([data])
-      .attr("class", "line")
-      .attr("d", valueline);
+      .attr("class", "area")
+      .attr("d", area);
 
-    // Add the X Axis
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+      // Add the line
+      svg.append("path")
+        .data([data])
+        .attr("class", "line")
+        .attr("d", line);
 
     // Add the Y Axis
     svg.append("g")
+      .attr("class", "y-axis")
       .call(d3.axisLeft(y));
   }
 }
