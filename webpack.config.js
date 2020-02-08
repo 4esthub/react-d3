@@ -3,7 +3,7 @@ const path = require("path");
 const config = {
   entry: {
     vendor: ["@babel/polyfill", "react"],
-    app: ["./src/components/index.js"]
+    app: ["./src/index.js"]
   },
   output: {
     path: path.resolve(__dirname, "public"),
